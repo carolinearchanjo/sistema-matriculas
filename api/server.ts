@@ -49,29 +49,34 @@ app.post("/matricula", async function (req, res) {
 });
 
 app.get("/matriculas", async function (req, res) {
-  try {
-    let resultado;
+      try {
+        let resultado
 
-    if (req.query.curso) {
-      resultado = await pool.query(
-        "SELECT * FROM matriculas WHERE curso ILIKE $1",
-        [req.query.curso],
-      );
-    } else if (req.query.nome) {
-      resultado = await pool.query(
-        "SELECT * FROM matriculas WHERE nome ILIKE $1",
-        [`%${req.query.nome}%`],
-      );
-    } else {
-      resultado = await pool.query("SELECT * FROM matriculas");
+        if (req.query.nome && req.query.curso) {
+            resultado = await pool.query(
+                "SELECT * FROM matriculas WHERE nome ILIKE $1 AND curso = $2",
+                [`%${req.query.nome}%`, req.query.curso]
+            )
+        } else if (req.query.nome) {
+            resultado = await pool.query(
+                "SELECT * FROM matriculas WHERE nome ILIKE $1",
+                [`%${req.query.nome}%`]
+            )
+        } else if (req.query.curso) {
+            resultado = await pool.query(
+                "SELECT * FROM matriculas WHERE curso = $1",
+                [req.query.curso]
+            )
+        } else {
+            resultado = await pool.query("SELECT * FROM matriculas")
+        }
+
+        res.json(resultado.rows)
+    } catch (erro) {
+        console.error(erro)
+        res.status(500).json({ mensagem: "Erro interno do servidor" })
     }
-
-    res.json(resultado.rows);
-  } catch (erro) {
-    console.error(erro);
-    res.status(500).json({ mensagem: "Erro interno do servidor" });
-  }
-});
+})
 
 app.delete("/matricula/:id", async function (req, res) {
     

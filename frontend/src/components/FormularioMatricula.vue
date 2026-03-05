@@ -1,4 +1,7 @@
 <template>
+  <div class="nav">
+    <RouterLink to="/admin">Painel Admin</RouterLink>
+  </div>
   <div class="container" v-if="!matriculaRealizada">
     <h1>Faça sua matrícula!</h1>
     <form @submit.prevent="enviarMatricula">
@@ -9,12 +12,7 @@
         v-model="nome"
       />
       <p v-if="faltaNome" class="erro-campo">{{ faltaNome }}</p>
-      <input
-        type="text"
-        name="email"
-        placeholder="E-mail"
-        v-model="email"
-      />
+      <input type="text" name="email" placeholder="E-mail" v-model="email" />
       <p v-if="formatoEmail" class="erro-campo">{{ formatoEmail }}</p>
 
       <select v-model="curso">
@@ -56,61 +54,61 @@ export default {
     let faltaCurso = ref("");
 
     async function enviarMatricula() {
-    faltaNome.value = ""
-    formatoEmail.value = ""
-    faltaCurso.value = ""
+      faltaNome.value = "";
+      formatoEmail.value = "";
+      faltaCurso.value = "";
 
-    let temErro = false
+      let temErro = false;
 
-    if (!nome.value) {
-        faltaNome.value = "O nome completo é obrigatório"
-        temErro = true
-    }
+      if (!nome.value) {
+        faltaNome.value = "O nome completo é obrigatório";
+        temErro = true;
+      }
 
-    if (!curso.value) {
-        faltaCurso.value = "A seleção de um curso é obrigatória"
-        temErro = true
-    }
+      if (!curso.value) {
+        faltaCurso.value = "A seleção de um curso é obrigatória";
+        temErro = true;
+      }
 
-    if (!email.value) {
-        formatoEmail.value = "O e-mail é obrigatório"
-        temErro = true
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-        formatoEmail.value = "O e-mail digitado é inválido"
-        temErro = true
-    }
+      if (!email.value) {
+        formatoEmail.value = "O e-mail é obrigatório";
+        temErro = true;
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+        formatoEmail.value = "O e-mail digitado é inválido";
+        temErro = true;
+      }
 
-    if (temErro) return
+      if (temErro) return;
 
-    const dadosMatricula = {
+      const dadosMatricula = {
         nome: nome.value,
         email: email.value,
         curso: curso.value,
-    }
+      };
 
-    const resposta = await fetch("http://localhost:3000/matricula", {
+      const resposta = await fetch("http://localhost:3000/matricula", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(dadosMatricula),
-    })
+      });
 
-    if (resposta.ok) {
-        matriculaRealizada.value = true
-        mensagem.value = "Matrícula realizada com sucesso!"
-        tipomensagem.value = "sucesso"
-    } else {
-        mensagem.value = "Erro ao realizar matrícula. Tente novamente."
-        tipomensagem.value = "erro"
+      if (resposta.ok) {
+        matriculaRealizada.value = true;
+        mensagem.value = "Matrícula realizada com sucesso!";
+        tipomensagem.value = "sucesso";
+      } else {
+        mensagem.value = "Erro ao realizar matrícula. Tente novamente.";
+        tipomensagem.value = "erro";
+      }
     }
-}
     function novaMatricula() {
       nome.value = "";
       email.value = "";
       curso.value = "";
       matriculaRealizada.value = false;
-    }    
+    }
 
     onMounted(async () => {
       const resposta = await fetch("http://localhost:3000/cursos");
@@ -263,6 +261,25 @@ h1 {
   margin: -0.5rem 0 0 0.25rem;
 }
 
+.nav {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+}
+
+.nav a {
+  background: #2d1b69;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.nav a:hover {
+  background: #1a0f3d;
+}
 </style>
 
 <style>
