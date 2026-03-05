@@ -48,8 +48,34 @@ CREATE TABLE matriculas (
 
 ## Como acessar
 
-Acesse a aplicação no navegador em: http://localhost:5173
+- **Formulário de matrícula:** http://localhost:5173
+- **Painel administrativo:** http://localhost:5173/admin
 
-## Consultando as matrículas
+## Documentação da API
 
-Para consultar as matrículas realizadas no servidor, acesse a API através da chamada GET /matriculas em http://localhost:3000 utilizando alguma ferramenta como o Postman. Você receberá em retorno um array do banco de dados com as matrículas realizadas.
+A API roda em `http://localhost:3000`. Abaixo estão as rotas disponíveis:
+
+### Cursos
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/cursos` | Retorna a lista de cursos disponíveis |
+
+### Matrículas
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/matriculas` | Retorna todas as matrículas |
+| GET | `/matriculas?nome=João` | Filtra matrículas por nome |
+| GET | `/matriculas?curso=Engenharia de Software` | Filtra matrículas por curso |
+| GET | `/matriculas?nome=João&curso=Engenharia de Software` | Filtra por nome e curso combinados |
+| POST | `/matricula` | Cria uma nova matrícula |
+| PUT | `/matricula/:id` | Atualiza os dados de uma matrícula |
+| DELETE | `/matricula/:id` | Remove uma matrícula |
+
+### Exemplo de body para POST e PUT
+```json
+{
+    "nome": "Caroline Mota Archanjo",
+    "email": "caroline@gmail.com",
+    "curso": "Análise e Desenvolvimento de Sistemas"
+}
+```
