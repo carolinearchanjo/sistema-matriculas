@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import FormularioMatricula from "./components/FormularioMatricula.vue";
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <FormularioMatricula />
+  <RouterView />
 </template>
 
 <style scoped></style>

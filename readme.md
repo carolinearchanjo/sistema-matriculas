@@ -46,10 +46,78 @@ CREATE TABLE matriculas (
 
 6. Na pasta `api`, copie o arquivo `.env.example`, renomeie para `.env` e preencha com as credenciais do seu banco de dados.
 
+## Configurando o administrador
+
+O sistema possui um único administrador configurado via variáveis de ambiente. No arquivo `.env`, defina:
+```
+ADMIN_USER=admin
+ADMIN_PASSWORD=seu_hash_aqui
+JWT_SECRET=sua_chave_secreta
+```
+
+A senha deve ser armazenada como um hash gerado pelo bcrypt. Para gerar o hash da sua senha, crie um arquivo temporário `gerar-hash.ts` na pasta `api` com o seguinte conteúdo:
+```typescript
+import bcrypt from 'bcryptjs'
+const senha = "sua_senha_aqui"
+const hash = bcrypt.hashSync(senha, 10)
+console.log(hash)
+```
+
+Execute com `npx ts-node gerar-hash.ts` e copie o hash gerado para o `.env`. Após isso, o arquivo pode ser deletado.
+
 ## Como acessar
 
-Acesse a aplicação no navegador em: http://localhost:5173
+- **Formulário de matrícula:** http://localhost:5173
+- **Login do administrador:** http://localhost:5173/login
+- **Painel administrativo:** http://localhost:5173/admin *(requer autenticação)*
 
-## Consultando as matrículas
+## Documentação da API
 
-Para consultar as matrículas realizadas no servidor, acesse a API através da chamada GET /matriculas em http://localhost:3000 utilizando alguma ferramenta como o Postman. Você receberá em retorno um array do banco de dados com as matrículas realizadas.
+A API roda em `http://localhost:3000`. Abaixo estão as rotas disponíveis:
+
+### Autenticação
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/login` | Autentica o administrador e retorna um token JWT |
+
+### Cursos
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| GET | `/cursos` | Retorna a lista de cursos disponíveis |
+
+### Matrículas
+| Método | Rota | Descrição | Autenticação |
+|--------|------|-----------|--------------|
+| POST | `/matricula` | Cria uma nova matrícula | Não |
+| GET | `/matriculas` | Retorna todas as matrículas | ✅ Sim |
+| GET | `/matriculas?nome=João` | Filtra matrículas por nome | ✅ Sim |
+| GET | `/matriculas?curso=Engenharia de Software` | Filtra matrículas por curso | ✅ Sim |
+| GET | `/matriculas?nome=João&curso=Engenharia de Software` | Filtra por nome e curso combinados | ✅ Sim |
+| PUT | `/matricula/:id` | Atualiza os dados de uma matrícula | ✅ Sim |
+| DELETE | `/matricula/:id` | Remove uma matrícula | ✅ Sim |
+
+### Exemplo de body para POST /login
+```json
+{
+    "usuario": "admin",
+    "senha": "sua_senha_aqui"
+}
+```
+
+### Exemplo de body para POST e PUT /matricula
+```json
+{
+    "nome": "Caroline Mota Archanjo",
+    "email": "caroline@gmail.com",
+    "curso": "Análise e Desenvolvimento de Sistemas"
+}
+```
+
+### Autenticação nas rotas protegidas
+
+As rotas marcadas com ✅ exigem um token JWT no header da requisição:
+```
+Authorization: Bearer seu_token_aqui
+```
+
+O token é obtido através da rota `POST /login` e expira em 8 horas.
