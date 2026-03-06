@@ -99,23 +99,36 @@ export default {
     const matriculaEditando = ref<Matricula | null>(null);
 
     async function deletarMatricula(id: number) {
-      await fetch(`http://localhost:3000/matricula/${id}`, {
+    const token = localStorage.getItem("token");
+    
+    await fetch(`http://localhost:3000/matricula/${id}`, {
         method: "DELETE",
-      });
-      const resposta = await fetch("http://localhost:3000/matriculas");
-      const dados = await resposta.json();
-      const matriculaDeletada = listaMatriculas.value.find((m) => m.id === id);
-      if (matriculaDeletada) {
-        mensagem.value = `Matrícula de ${matriculaDeletada.nome} deletada com sucesso!`;
-      } else {
-        mensagem.value = "Matrícula deletada com sucesso!";
-      }
-      listaMatriculas.value = dados;
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    
+    const matriculaDeletada = listaMatriculas.value.find((m) => m.id === id);
+    
+    const resposta = await fetch("http://localhost:3000/matriculas", {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    const dados = await resposta.json();
 
-      setTimeout(() => {
-        mensagem.value = "";
-      }, 3000);
+    if (matriculaDeletada) {
+        mensagem.value = `Matrícula de ${matriculaDeletada.nome} deletada com sucesso!`
+    } else {
+        mensagem.value = "Matrícula deletada com sucesso!"
     }
+    listaMatriculas.value = dados;
+
+    setTimeout(() => {
+        mensagem.value = "";
+    }, 3000);
+}
+
 
     function editarMatricula(matricula: Matricula) {
       matriculaEditando.value = matricula;
@@ -123,22 +136,30 @@ export default {
 
     async function salvarEdicao() {
       if (!matriculaEditando.value) return;
+
+      const token = localStorage.getItem("token");
+
       await fetch(
         `http://localhost:3000/matricula/${matriculaEditando.value.id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(matriculaEditando.value),
         },
       );
 
-      const resposta = await fetch("http://localhost:3000/matriculas");
+      const resposta = await fetch("http://localhost:3000/matriculas", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const dados = await resposta.json();
+
       listaMatriculas.value = dados;
       matriculaEditando.value = null;
-
       mensagem.value = "Matrícula atualizada com sucesso!";
 
       setTimeout(() => {
@@ -151,19 +172,22 @@ export default {
     }
 
     async function buscarMatriculas() {
-      let url = "http://localhost:3000/matriculas";
-      const params = [];
+    const token = localStorage.getItem("token");
+    let url = "http://localhost:3000/matriculas";
+    const params = [];
 
-      if (filtroNome.value)
-        params.push(`nome=${encodeURIComponent(filtroNome.value)}`);
-      if (filtroCurso.value)
-        params.push(`curso=${encodeURIComponent(filtroCurso.value)}`);
-      if (params.length > 0) url += `?${params.join("&")}`;
+    if (filtroNome.value) params.push(`nome=${encodeURIComponent(filtroNome.value)}`);
+    if (filtroCurso.value) params.push(`curso=${encodeURIComponent(filtroCurso.value)}`);
+    if (params.length > 0) url += `?${params.join("&")}`;
 
-      const resposta = await fetch(url);
-      const dados = await resposta.json();
-      listaMatriculas.value = dados;
-    }
+    const resposta = await fetch(url, {
+        headers: {
+            "Authorization": `Bearer ${token}`
+        }
+    });
+    const dados = await resposta.json();
+    listaMatriculas.value = dados;
+}
 
     function limparFiltros() {
       filtroNome.value = "";
@@ -172,7 +196,12 @@ export default {
     }
 
     onMounted(async () => {
-      const resposta = await fetch("http://localhost:3000/matriculas");
+      const token = localStorage.getItem("token");
+      const resposta = await fetch("http://localhost:3000/matriculas", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       const dados = await resposta.json();
       listaMatriculas.value = dados;
     });

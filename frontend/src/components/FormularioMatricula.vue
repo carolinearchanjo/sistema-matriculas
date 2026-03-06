@@ -1,6 +1,6 @@
 <template>
   <div class="nav">
-    <RouterLink to="/admin">Painel Admin</RouterLink>
+    <RouterLink to="/login">Painel Admin</RouterLink>
   </div>
   <div class="container" v-if="!matriculaRealizada">
     <h1>Faça sua matrícula!</h1>
