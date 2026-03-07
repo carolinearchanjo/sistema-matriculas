@@ -86,13 +86,16 @@ export default {
         curso: curso.value,
       };
 
-      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matricula`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_URL}/matricula`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dadosMatricula),
         },
-        body: JSON.stringify(dadosMatricula),
-      });
+      );
 
       if (resposta.ok) {
         matriculaRealizada.value = true;
@@ -246,6 +249,7 @@ h1 {
   flex-direction: column;
   gap: 0.75rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .sucesso-container h2 {
@@ -280,6 +284,39 @@ h1 {
 .nav a:hover {
   background: #1a0f3d;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  form {
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .nav a {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+
+  .sucesso-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.5rem 1rem;
+  }
+}
 </style>
 
 <style>
@@ -291,5 +328,14 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  body {
+    align-items: center;
+    min-height: 100dvh;
+  }
 }
 </style>

@@ -31,12 +31,12 @@
         </thead>
         <tbody>
           <tr v-for="matricula in listaMatriculas" :key="matricula.id">
-            <td>{{ matricula.id }}</td>
-            <td>{{ matricula.nome }}</td>
-            <td>{{ matricula.email }}</td>
-            <td>{{ matricula.curso }}</td>
-            <td>{{ formatarData(matricula.created_at) }}</td>
-            <td>
+            <td data-label="ID">{{ matricula.id }}</td>
+            <td data-label="Nome">{{ matricula.nome }}</td>
+            <td data-label="E-mail">{{ matricula.email }}</td>
+            <td data-label="Curso">{{ matricula.curso }}</td>
+            <td data-label="Data">{{ formatarData(matricula.created_at) }}</td>
+            <td data-label="Ações">
               <div class="coluna-acoes">
                 <button class="btn-editar" @click="editarMatricula(matricula)">
                   Editar
@@ -99,40 +99,42 @@ export default {
     const matriculaEditando = ref<Matricula | null>(null);
 
     async function deletarMatricula(id: number) {
-      if (!confirm("Tem certeza que deseja deletar esta matrícula?")) return
-    const token = localStorage.getItem("token");
-    
-    await fetch(`${import.meta.env.VITE_API_URL}/matricula/${id}`, {
+      if (!confirm("Tem certeza que deseja deletar esta matrícula?")) return;
+      const token = localStorage.getItem("token");
+
+      await fetch(`${import.meta.env.VITE_API_URL}/matricula/${id}`, {
         method: "DELETE",
         headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
-    
-    const matriculaDeletada = listaMatriculas.value.find((m) => m.id === id);
-    
-    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matriculas`, {
-        headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
-    const dados = await resposta.json();
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (matriculaDeletada) {
-        mensagem.value = `Matrícula de ${matriculaDeletada.nome} deletada com sucesso!`
-    } else {
-        mensagem.value = "Matrícula deletada com sucesso!"
-    }
-    listaMatriculas.value = dados;
+      const matriculaDeletada = listaMatriculas.value.find((m) => m.id === id);
 
-    setTimeout(() => {
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_URL}/matriculas`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const dados = await resposta.json();
+
+      if (matriculaDeletada) {
+        mensagem.value = `Matrícula de ${matriculaDeletada.nome} deletada com sucesso!`;
+      } else {
+        mensagem.value = "Matrícula deletada com sucesso!";
+      }
+      listaMatriculas.value = dados;
+
+      setTimeout(() => {
         mensagem.value = "";
-    }, 3000);
-}
-
+      }, 3000);
+    }
 
     function editarMatricula(matricula: Matricula) {
-      if (!confirm("Tem certeza que deseja editar esta matrícula?")) return
+      if (!confirm("Tem certeza que deseja editar esta matrícula?")) return;
       matriculaEditando.value = matricula;
     }
 
@@ -153,11 +155,14 @@ export default {
         },
       );
 
-      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matriculas`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_URL}/matriculas`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
       const dados = await resposta.json();
 
       listaMatriculas.value = dados;
@@ -174,22 +179,24 @@ export default {
     }
 
     async function buscarMatriculas() {
-    const token = localStorage.getItem("token");
-    let url = `${import.meta.env.VITE_API_URL}/matriculas`;
-    const params = [];
+      const token = localStorage.getItem("token");
+      let url = `${import.meta.env.VITE_API_URL}/matriculas`;
+      const params = [];
 
-    if (filtroNome.value) params.push(`nome=${encodeURIComponent(filtroNome.value)}`);
-    if (filtroCurso.value) params.push(`curso=${encodeURIComponent(filtroCurso.value)}`);
-    if (params.length > 0) url += `?${params.join("&")}`;
+      if (filtroNome.value)
+        params.push(`nome=${encodeURIComponent(filtroNome.value)}`);
+      if (filtroCurso.value)
+        params.push(`curso=${encodeURIComponent(filtroCurso.value)}`);
+      if (params.length > 0) url += `?${params.join("&")}`;
 
-    const resposta = await fetch(url, {
+      const resposta = await fetch(url, {
         headers: {
-            "Authorization": `Bearer ${token}`
-        }
-    });
-    const dados = await resposta.json();
-    listaMatriculas.value = dados;
-}
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const dados = await resposta.json();
+      listaMatriculas.value = dados;
+    }
 
     function limparFiltros() {
       filtroNome.value = "";
@@ -199,12 +206,15 @@ export default {
 
     onMounted(async () => {
       const token = localStorage.getItem("token");
-      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matriculas`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_URL}/matriculas`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          cache: "no-store",
         },
-        cache: "no-store"
-      });
+      );
       const dados = await resposta.json();
       listaMatriculas.value = dados;
     });
@@ -457,6 +467,67 @@ td {
 .nav a:hover {
   background: #1a0f3d;
 }
+
+@media (max-width: 768px) {
+  .painel {
+    padding: 1rem;
+    margin: 1rem auto;
+    width: 90%;
+  }
+
+  .btn-buscar,
+  .btn-limpar {
+    width: 100%;
+  }
+
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  thead {
+    display: none;
+  }
+
+  tr {
+    border: 1px solid #e0d0f0;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+  }
+
+  td {
+    border: none;
+    padding: 0.4rem 0.75rem;
+  }
+
+  td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #2d1b69;
+    display: block;
+    font-size: 0.75rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .filtros {
+    flex-direction: column;
+  }
+
+  .filtros input,
+  .filtros select {
+    width: 100%;
+  }
+
+  .coluna-acoes {
+    justify-content: center;
+    padding: 0.5rem 0;
+  }
+}
 </style>
 
 <style>
@@ -467,6 +538,8 @@ body {
   font-family: "Segoe UI", sans-serif;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 </style>
