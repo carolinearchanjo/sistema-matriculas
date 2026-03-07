@@ -4,9 +4,9 @@ Aplicação web para matrícula em cursos online, desenvolvida com Vue.js no fro
 
 ## Acesse o projeto
 
-- **Formulário de matrícula:** https://sistema-matriculas-exoq8e67i-carolinearchanjos-projects.vercel.app
-- **Login do administrador:** https://sistema-matriculas-exoq8e67i-carolinearchanjos-projects.vercel.app/login
-- **Painel administrativo:** https://sistema-matriculas-exoq8e67i-carolinearchanjos-projects.vercel.app/admin *(requer autenticação)*
+- **Formulário de matrícula:** sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app
+- **Login do administrador:** sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/login
+- **Painel administrativo:** sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/admin *(requer autenticação)*
 
 ## Credenciais de demonstração
 
