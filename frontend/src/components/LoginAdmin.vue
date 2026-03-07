@@ -103,6 +103,15 @@ button:hover {
   font-size: 0.8rem;
   margin: -0.5rem 0 0 0.25rem;
 }
+
+@media (max-width: 768px) {
+  .container {
+    margin: 1rem;
+    width: calc(100% - 2rem);
+    box-sizing: border-box;
+  }
+}
+
 </style>
 
 <style>
@@ -115,4 +124,12 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+@media (max-width: 768px) {
+  body {
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+}
+
 </style>

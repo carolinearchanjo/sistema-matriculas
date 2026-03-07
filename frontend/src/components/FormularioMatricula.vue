@@ -280,6 +280,34 @@ h1 {
 .nav a:hover {
   background: #1a0f3d;
 }
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  form {
+    border-radius: 12px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+
+  .nav {
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+
+  .nav a {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
 </style>
 
 <style>
