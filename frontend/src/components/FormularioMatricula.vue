@@ -86,7 +86,7 @@ export default {
         curso: curso.value,
       };
 
-      const resposta = await fetch("http://localhost:3000/matricula", {
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matricula`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +111,7 @@ export default {
     }
 
     onMounted(async () => {
-      const resposta = await fetch("http://localhost:3000/cursos");
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/cursos`);
       const dados = await resposta.json();
       listaCursos.value = dados;
     });
