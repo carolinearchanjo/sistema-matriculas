@@ -2,8 +2,8 @@
   <div class="container">
     <h1>Login</h1>
     <form @submit.prevent="fazerLogin">
-      <input type="text" placeholder="Usuário" v-model="usuario"/>
-      <input type="password" placeholder="Senha" v-model="senha"/>
+      <input type="text" placeholder="Usuário" v-model="usuario" />
+      <input type="password" placeholder="Senha" v-model="senha" />
       <p v-if="erro" class="erro-campo">{{ erro }}</p>
       <button type="submit">Fazer Login</button>
     </form>
@@ -15,31 +15,31 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
-    setup() {
-        const usuario = ref("")
-        const senha = ref("")
-        const erro = ref("")
-        const router = useRouter()
+  setup() {
+    const usuario = ref("");
+    const senha = ref("");
+    const erro = ref("");
+    const router = useRouter();
 
-        async function fazerLogin() {
-            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ usuario: usuario.value, senha: senha.value })
-            })
+    async function fazerLogin() {
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ usuario: usuario.value, senha: senha.value }),
+      });
 
-            if (resposta.ok) {
-                const dados = await resposta.json()
-                localStorage.setItem("token", dados.token)
-                router.push("/admin")
-            } else {
-                erro.value = "Usuário ou senha incorretos"
-            }
-        }
-
-        return { usuario, senha, erro, fazerLogin }
+      if (resposta.ok) {
+        const dados = await resposta.json();
+        localStorage.setItem("token", dados.token);
+        router.push("/admin");
+      } else {
+        erro.value = "Usuário ou senha incorretos";
+      }
     }
-}
+
+    return { usuario, senha, erro, fazerLogin };
+  },
+};
 </script>
 
 <style scoped>
@@ -111,7 +111,6 @@ button:hover {
     box-sizing: border-box;
   }
 }
-
 </style>
 
 <style>
@@ -131,5 +130,4 @@ body {
     padding-top: 2rem;
   }
 }
-
 </style>

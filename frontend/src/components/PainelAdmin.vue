@@ -475,7 +475,12 @@ td {
     width: 90%;
   }
 
-  table, thead, tbody, th, td, tr {
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
     display: block;
   }
 
@@ -518,7 +523,6 @@ td {
     padding: 0.5rem 0;
   }
 }
-
 </style>
 
 <style>

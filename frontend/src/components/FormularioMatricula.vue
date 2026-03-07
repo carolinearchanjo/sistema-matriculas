@@ -86,13 +86,16 @@ export default {
         curso: curso.value,
       };
 
-      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matricula`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const resposta = await fetch(
+        `${import.meta.env.VITE_API_URL}/matricula`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dadosMatricula),
         },
-        body: JSON.stringify(dadosMatricula),
-      });
+      );
 
       if (resposta.ok) {
         matriculaRealizada.value = true;
@@ -246,6 +249,7 @@ h1 {
   flex-direction: column;
   gap: 0.75rem;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .sucesso-container h2 {
@@ -306,8 +310,13 @@ h1 {
     font-size: 0.8rem;
     padding: 0.4rem 0.6rem;
   }
-}
 
+  .sucesso-container {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 1.5rem 1rem;
+  }
+}
 </style>
 
 <style>
