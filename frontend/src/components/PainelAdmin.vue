@@ -99,9 +99,10 @@ export default {
     const matriculaEditando = ref<Matricula | null>(null);
 
     async function deletarMatricula(id: number) {
+      if (!confirm("Tem certeza que deseja deletar esta matrícula?")) return
     const token = localStorage.getItem("token");
     
-    await fetch(`http://localhost:3000/matricula/${id}`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/matricula/${id}`, {
         method: "DELETE",
         headers: {
             "Authorization": `Bearer ${token}`
@@ -110,7 +111,7 @@ export default {
     
     const matriculaDeletada = listaMatriculas.value.find((m) => m.id === id);
     
-    const resposta = await fetch("http://localhost:3000/matriculas", {
+    const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matriculas`, {
         headers: {
             "Authorization": `Bearer ${token}`
         }
@@ -131,6 +132,7 @@ export default {
 
 
     function editarMatricula(matricula: Matricula) {
+      if (!confirm("Tem certeza que deseja editar esta matrícula?")) return
       matriculaEditando.value = matricula;
     }
 
@@ -140,7 +142,7 @@ export default {
       const token = localStorage.getItem("token");
 
       await fetch(
-        `http://localhost:3000/matricula/${matriculaEditando.value.id}`,
+        `${import.meta.env.VITE_API_URL}/matricula/${matriculaEditando.value.id}`,
         {
           method: "PUT",
           headers: {
@@ -151,7 +153,7 @@ export default {
         },
       );
 
-      const resposta = await fetch("http://localhost:3000/matriculas", {
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matriculas`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -173,7 +175,7 @@ export default {
 
     async function buscarMatriculas() {
     const token = localStorage.getItem("token");
-    let url = "http://localhost:3000/matriculas";
+    let url = `${import.meta.env.VITE_API_URL}/matriculas`;
     const params = [];
 
     if (filtroNome.value) params.push(`nome=${encodeURIComponent(filtroNome.value)}`);
@@ -197,10 +199,11 @@ export default {
 
     onMounted(async () => {
       const token = localStorage.getItem("token");
-      const resposta = await fetch("http://localhost:3000/matriculas", {
+      const resposta = await fetch(`${import.meta.env.VITE_API_URL}/matriculas`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        cache: "no-store"
       });
       const dados = await resposta.json();
       listaMatriculas.value = dados;

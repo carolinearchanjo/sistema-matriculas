@@ -22,7 +22,7 @@ export default {
         const router = useRouter()
 
         async function fazerLogin() {
-            const resposta = await fetch("http://localhost:3000/login", {
+            const resposta = await fetch(`${import.meta.env.VITE_API_URL}/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ usuario: usuario.value, senha: senha.value })
