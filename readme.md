@@ -1,39 +1,44 @@
 # Sistema de Matrículas Online
 
-Aplicação web para matrícula em cursos online, desenvolvida com Vue.js no frontend e Node.js + Express + TypeScript no backend, conectada ao banco de dados com PostgreSQL.
+Aplicação web para matrícula em cursos online, desenvolvida com Vue.js no frontend e Node.js + Express + TypeScript no backend, conectada ao banco de dados PostgreSQL. O projeto está hospedado online com a API no Railway e o frontend no Vercel.
 
-## Como rodar o projeto
+## Acesse o projeto
 
-### API
-1. Abra um terminal e navegue até a pasta `api`
-2. Rode `npm install` para instalar as dependências
-3. Rode `npm start` para iniciar o servidor
+- **Formulário de matrícula:** https://sistema-matriculas-exoq8e67i-carolinearchanjos-projects.vercel.app
+- **Login do administrador:** https://sistema-matriculas-exoq8e67i-carolinearchanjos-projects.vercel.app/login
+- **Painel administrativo:** https://sistema-matriculas-exoq8e67i-carolinearchanjos-projects.vercel.app/admin *(requer autenticação)*
 
-### Frontend
-1. Abra um segundo terminal e navegue até a pasta `frontend`
-2. Rode `npm install` para instalar as dependências
-3. Rode `npm run dev` para iniciar a aplicação
+## Credenciais de demonstração
 
-## Configurando o banco de dados
+Para explorar o painel administrativo, utilize:
 
-1. Baixe e instale o PostgreSQL em [postgresql.org/download](https://postgresql.org/download)
+- **Usuário:** `admin`
+- **Senha:** `admin123`
 
-2. Acesse o PostgreSQL pelo terminal:
+## Como rodar o projeto localmente
+
+### Pré-requisitos
+- Node.js instalado
+- PostgreSQL instalado — baixe em [postgresql.org/download](https://postgresql.org/download)
+
+### Configurando o banco de dados
+
+1. Acesse o PostgreSQL pelo terminal:
 ```sql
 psql -U postgres
 ```
 
-3. Crie o banco de dados:
+2. Crie o banco de dados:
 ```sql
 CREATE DATABASE matriculas;
 ```
 
-4. Conecte ao banco:
+3. Conecte ao banco:
 ```sql
 \c matriculas
 ```
 
-5. Crie a tabela:
+4. Crie a tabela:
 ```sql
 CREATE TABLE matriculas (
     id SERIAL PRIMARY KEY,
@@ -44,18 +49,21 @@ CREATE TABLE matriculas (
 );
 ```
 
-6. Na pasta `api`, copie o arquivo `.env.example`, renomeie para `.env` e preencha com as credenciais do seu banco de dados.
+### Configurando as variáveis de ambiente
 
-## Configurando o administrador
-
-O sistema possui um único administrador configurado via variáveis de ambiente. No arquivo `.env`, defina:
+Na pasta `api`, copie o arquivo `.env.example`, renomeie para `.env` e preencha:
 ```
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=sua_senha_aqui
+DB_NAME=matriculas
 ADMIN_USER=admin
 ADMIN_PASSWORD=seu_hash_aqui
 JWT_SECRET=sua_chave_secreta
 ```
 
-A senha deve ser armazenada como um hash gerado pelo bcrypt. Para gerar o hash da sua senha, crie um arquivo temporário `gerar-hash.ts` na pasta `api` com o seguinte conteúdo:
+A senha do administrador deve ser armazenada como um hash gerado pelo bcrypt. Para gerar o hash, crie um arquivo temporário `gerar-hash.ts` na pasta `api`:
 ```typescript
 import bcrypt from 'bcryptjs'
 const senha = "sua_senha_aqui"
@@ -63,17 +71,30 @@ const hash = bcrypt.hashSync(senha, 10)
 console.log(hash)
 ```
 
-Execute com `npx ts-node gerar-hash.ts` e copie o hash gerado para o `.env`. Após isso, o arquivo pode ser deletado.
+Execute com `npx ts-node gerar-hash.ts`, copie o hash gerado para o `.env` e delete o arquivo.
 
-## Como acessar
+Na pasta `frontend`, copie o arquivo `.env.example`, renomeie para `.env` e preencha:
+```
+VITE_API_URL=http://localhost:3000
+```
 
-- **Formulário de matrícula:** http://localhost:5173
-- **Login do administrador:** http://localhost:5173/login
-- **Painel administrativo:** http://localhost:5173/admin *(requer autenticação)*
+### Rodando o projeto
+
+**API:**
+1. Abra um terminal e navegue até a pasta `api`
+2. Rode `npm install` para instalar as dependências
+3. Rode `npm start` para iniciar o servidor
+
+**Frontend:**
+1. Abra um segundo terminal e navegue até a pasta `frontend`
+2. Rode `npm install` para instalar as dependências
+3. Rode `npm run dev` para iniciar a aplicação
+
+**Acesse localmente em:** http://localhost:5173
 
 ## Documentação da API
 
-A API roda em `http://localhost:3000`. Abaixo estão as rotas disponíveis:
+A API de produção roda em `https://sistema-matriculas-production.up.railway.app`.
 
 ### Autenticação
 | Método | Rota | Descrição |
