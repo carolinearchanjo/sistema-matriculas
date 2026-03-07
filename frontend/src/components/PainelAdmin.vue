@@ -99,6 +99,7 @@ export default {
     const matriculaEditando = ref<Matricula | null>(null);
 
     async function deletarMatricula(id: number) {
+      if (!confirm("Tem certeza que deseja deletar esta matrícula?")) return
     const token = localStorage.getItem("token");
     
     await fetch(`${import.meta.env.VITE_API_URL}/matricula/${id}`, {
@@ -131,6 +132,7 @@ export default {
 
 
     function editarMatricula(matricula: Matricula) {
+      if (!confirm("Tem certeza que deseja editar esta matrícula?")) return
       matriculaEditando.value = matricula;
     }
 
