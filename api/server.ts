@@ -74,6 +74,20 @@ app.post("/matricula", async function (req, res) {
   }
 
   try {
+    const forcar = req.query.forcar === "true";
+
+    if (!forcar) {
+      const existente = await pool.query(
+        "SELECT id FROM matriculas WHERE email = $1",
+        [dados.email],
+      );
+
+      if (existente.rows.length > 0) {
+        res.status(409).json({ mensagem: "ja_existe" });
+        return;
+      }
+    }
+
     const resultado = await pool.query(
       "INSERT INTO matriculas (nome, email, curso) VALUES ($1, $2, $3) RETURNING *",
       [dados.nome, dados.email, dados.curso],

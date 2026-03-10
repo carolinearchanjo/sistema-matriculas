@@ -1,5 +1,8 @@
 <template>
-  <div class="nav"><RouterLink to="/">Voltar ao formulário</RouterLink></div>
+  <div class="nav">
+    <RouterLink to="/">Voltar ao formulário</RouterLink>
+    <button class="btn-sair" @click="sair">Sair</button>
+  </div>
   <div class="painel">
     <h1>Painel Administrativo</h1>
     <p v-if="mensagem" class="mensagem-feedback">{{ mensagem }}</p>
@@ -81,6 +84,7 @@
 
 <script lang="ts">
 import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 interface Matricula {
   id: number;
@@ -92,11 +96,21 @@ interface Matricula {
 
 export default {
   setup() {
+    const router = useRouter();
     const listaMatriculas = ref<Matricula[]>([]);
     const filtroCurso = ref("");
     const filtroNome = ref("");
     const mensagem = ref("");
     const matriculaEditando = ref<Matricula | null>(null);
+
+    function verificarAutenticacao(resposta: Response) {
+      if (resposta.status === 401) {
+        localStorage.removeItem("token");
+        router.push("/login");
+        return false;
+      }
+      return true;
+    }
 
     async function deletarMatricula(id: number) {
       if (!confirm("Tem certeza que deseja deletar esta matrícula?")) return;
@@ -104,9 +118,7 @@ export default {
 
       await fetch(`${import.meta.env.VITE_API_URL}/matricula/${id}`, {
         method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
 
       const matriculaDeletada = listaMatriculas.value.find((m) => m.id === id);
@@ -114,11 +126,12 @@ export default {
       const resposta = await fetch(
         `${import.meta.env.VITE_API_URL}/matriculas`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
+
+      if (!verificarAutenticacao(resposta)) return;
+
       const dados = await resposta.json();
 
       if (matriculaDeletada) {
@@ -140,7 +153,6 @@ export default {
 
     async function salvarEdicao() {
       if (!matriculaEditando.value) return;
-
       const token = localStorage.getItem("token");
 
       await fetch(
@@ -158,13 +170,13 @@ export default {
       const resposta = await fetch(
         `${import.meta.env.VITE_API_URL}/matriculas`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
-      const dados = await resposta.json();
 
+      if (!verificarAutenticacao(resposta)) return;
+
+      const dados = await resposta.json();
       listaMatriculas.value = dados;
       matriculaEditando.value = null;
       mensagem.value = "Matrícula atualizada com sucesso!";
@@ -190,10 +202,11 @@ export default {
       if (params.length > 0) url += `?${params.join("&")}`;
 
       const resposta = await fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
       });
+
+      if (!verificarAutenticacao(resposta)) return;
+
       const dados = await resposta.json();
       listaMatriculas.value = dados;
     }
@@ -204,17 +217,23 @@ export default {
       buscarMatriculas();
     }
 
+    function sair() {
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
+
     onMounted(async () => {
       const token = localStorage.getItem("token");
       const resposta = await fetch(
         `${import.meta.env.VITE_API_URL}/matriculas`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
           cache: "no-store",
         },
       );
+
+      if (!verificarAutenticacao(resposta)) return;
+
       const dados = await resposta.json();
       listaMatriculas.value = dados;
     });
@@ -231,6 +250,7 @@ export default {
       formatarData,
       buscarMatriculas,
       limparFiltros,
+      sair,
     };
   },
 };
@@ -298,11 +318,6 @@ tr:hover {
 }
 .btn-deletar:hover {
   background: #a31515;
-}
-
-td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #e0d0f0;
 }
 
 .coluna-acoes {
@@ -393,17 +408,7 @@ td {
   flex-wrap: wrap;
 }
 
-.filtros input {
-  padding: 0.75rem 1rem;
-  border: 2px solid #e0d0f0;
-  border-radius: 8px;
-  font-size: 1rem;
-  outline: none;
-  transition: border-color 0.3s;
-  flex: 1;
-  box-sizing: border-box;
-}
-
+.filtros input,
 .filtros select {
   padding: 0.75rem 1rem;
   border: 2px solid #e0d0f0;
@@ -443,7 +448,6 @@ td {
 .btn-buscar:hover {
   background: #1a0f3d;
 }
-
 .btn-limpar:hover {
   background: #c9b8e8;
 }
@@ -527,6 +531,20 @@ td {
     justify-content: center;
     padding: 0.5rem 0;
   }
+}
+
+.btn-sair {
+  background: #c62828;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-sair:hover {
+  background: #a31515;
 }
 </style>
 

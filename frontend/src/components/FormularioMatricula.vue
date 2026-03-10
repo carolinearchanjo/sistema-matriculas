@@ -90,22 +90,37 @@ export default {
         `${import.meta.env.VITE_API_URL}/matricula`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify(dadosMatricula),
         },
       );
 
+      if (resposta.status === 409) {
+        const continuar = confirm(
+          "Já existe uma matrícula com este e-mail. Deseja realizar uma nova matrícula mesmo assim?",
+        );
+        if (!continuar) return;
+
+        const respostaNova = await fetch(
+          `${import.meta.env.VITE_API_URL}/matricula?forcar=true`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(dadosMatricula),
+          },
+        );
+
+        if (respostaNova.ok) {
+          matriculaRealizada.value = true;
+        }
+        return;
+      }
+
       if (resposta.ok) {
         matriculaRealizada.value = true;
-        mensagem.value = "Matrícula realizada com sucesso!";
-        tipomensagem.value = "sucesso";
-      } else {
-        mensagem.value = "Erro ao realizar matrícula. Tente novamente.";
-        tipomensagem.value = "erro";
       }
     }
+
     function novaMatricula() {
       nome.value = "";
       email.value = "";

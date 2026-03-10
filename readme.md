@@ -4,9 +4,9 @@ Aplicação web para matrícula em cursos online, desenvolvida com Vue.js no fro
 
 ## Acesse o projeto
 
-- **Formulário de matrícula:** [sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app](https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/)
-- **Login do administrador:** [sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/login](https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/login)
-- **Painel administrativo:** [sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/admin](https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/admin) *(requer autenticação)*
+- **Formulário de matrícula:** https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app
+- **Login do administrador:** https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/login
+- **Painel administrativo:** https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/admin *(requer autenticação)*
 
 ## Credenciais de demonstração
 
@@ -116,6 +116,7 @@ A API de produção roda em `https://sistema-matriculas-production.up.railway.ap
 | GET | `/matriculas?nome=João&curso=Engenharia de Software` | Filtra por nome e curso combinados | ✅ Sim |
 | PUT | `/matricula/:id` | Atualiza os dados de uma matrícula | ✅ Sim |
 | DELETE | `/matricula/:id` | Remove uma matrícula | ✅ Sim |
+| POST | `/matricula?forcar=true` | Cria matrícula mesmo com e-mail já cadastrado | Não |
 
 ### Exemplo de body para POST /login
 ```json
