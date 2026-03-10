@@ -334,8 +334,8 @@ body {
 
 @media (max-width: 768px) {
   body {
-    align-items: flex-start;
-    padding-top: 4rem;
+    align-items: center;
+    min-height: 100dvh;
   }
 }
 </style>
