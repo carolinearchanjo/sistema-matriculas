@@ -475,6 +475,11 @@ td {
     width: 90%;
   }
 
+  .btn-buscar,
+  .btn-limpar {
+    width: 100%;
+  }
+
   table,
   thead,
   tbody,

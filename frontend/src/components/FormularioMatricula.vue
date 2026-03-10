@@ -331,4 +331,11 @@ body {
   padding: 1rem;
   box-sizing: border-box;
 }
+
+@media (max-width: 768px) {
+  body {
+    align-items: flex-start;
+    padding-top: 4rem;
+  }
+}
 </style>
