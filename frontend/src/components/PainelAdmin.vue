@@ -1,5 +1,8 @@
 <template>
-  <div class="nav"><RouterLink to="/">Voltar ao formulário</RouterLink></div>
+  <div class="nav">
+    <RouterLink to="/">Voltar ao formulário</RouterLink>
+    <button class="btn-sair" @click="sair">Sair</button>
+  </div>
   <div class="painel">
     <h1>Painel Administrativo</h1>
     <p v-if="mensagem" class="mensagem-feedback">{{ mensagem }}</p>
@@ -214,6 +217,11 @@ export default {
       buscarMatriculas();
     }
 
+    function sair() {
+      localStorage.removeItem("token");
+      router.push("/login");
+    }
+
     onMounted(async () => {
       const token = localStorage.getItem("token");
       const resposta = await fetch(
@@ -242,6 +250,7 @@ export default {
       formatarData,
       buscarMatriculas,
       limparFiltros,
+      sair,
     };
   },
 };
@@ -522,6 +531,20 @@ tr:hover {
     justify-content: center;
     padding: 0.5rem 0;
   }
+}
+
+.btn-sair {
+  background: #c62828;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.btn-sair:hover {
+  background: #a31515;
 }
 </style>
 
