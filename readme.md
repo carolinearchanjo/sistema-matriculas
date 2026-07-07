@@ -1,12 +1,6 @@
 # Sistema de Matrículas Online
 
-Aplicação web para matrícula em cursos online, desenvolvida com Vue.js no frontend e Node.js + Express + TypeScript no backend, conectada ao banco de dados PostgreSQL. O projeto está hospedado online com a API no Railway e o frontend no Vercel.
-
-## Acesse o projeto
-
-- **Formulário de matrícula:** https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app
-- **Login do administrador:** https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/login
-- **Painel administrativo:** https://sistema-matriculas-git-master-carolinearchanjos-projects.vercel.app/admin *(requer autenticação)*
+Aplicação web para matrícula em cursos online, desenvolvida com Vue.js no frontend e Node.js + Express + TypeScript no backend, conectada ao banco de dados PostgreSQL.
 
 ## Credenciais de demonstração
 
@@ -93,8 +87,6 @@ VITE_API_URL=http://localhost:3000
 **Acesse localmente em:** http://localhost:5173
 
 ## Documentação da API
-
-A API de produção roda em `https://sistema-matriculas-production.up.railway.app`.
 
 ### Autenticação
 | Método | Rota | Descrição |
